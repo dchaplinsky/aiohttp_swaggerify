@@ -73,9 +73,14 @@ def swaggerify(app, parse_module_info=True, **kwargs):
                 "required": True,
                 "schema": r.handler._request_schema
             }]
+        else:
+            desc["parameters"] = [{
+                "in": "body",
+                "name": "body"
+            }]
 
-            if hasattr(r.handler, "_swg_input"):
-                desc["parameters"][0].update(r.handler._swg_input)
+        if hasattr(r.handler, "_swg_input"):
+            desc["parameters"][0].update(r.handler._swg_input)
 
         if hasattr(r.handler, "_response_schema"):
             desc["responses"]["200"] = {
@@ -83,9 +88,13 @@ def swaggerify(app, parse_module_info=True, **kwargs):
                 "description": "Results of the request",
                 "schema": r.handler._response_schema
             }
+        else:
+            desc["responses"]["200"] = {
+                "description": "Results of the request"
+            }
 
-            if hasattr(r.handler, "_swg_output"):
-                desc["responses"]["200"].update(r.handler._swg_output)
+        if hasattr(r.handler, "_swg_output"):
+            desc["responses"]["200"].update(r.handler._swg_output)
 
         if hasattr(r.handler, "_swg_info"):
             desc.update(r.handler._swg_info)
